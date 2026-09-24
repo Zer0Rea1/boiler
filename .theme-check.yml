@@ -1,0 +1,7 @@
+extends: theme-check:recommended
+
+# Custom configuration if needed
+ParserBlockingScript:
+  enabled: true
+AssetSizeAppList:
+  enabled: false

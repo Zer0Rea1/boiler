@@ -1,0 +1,15 @@
+# Shopify local files
+.shopify/
+.env
+.env.*
+
+# Dependencies
+node_modules/
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+*.tmp

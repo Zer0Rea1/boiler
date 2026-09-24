@@ -1,0 +1,28 @@
+{
+  "name": "boiler",
+  "version": "1.0.0",
+  "description": "Boiler - Shopify theme starter built from scratch with Tailwind CSS",
+  "scripts": {
+    "dev": "concurrently \"npm run watch\" \"npm run shopify:dev\"",
+    "watch": "npx @tailwindcss/cli -i ./src/tailwind.css -o ./assets/tailwind.css --watch",
+    "build": "npx @tailwindcss/cli -i ./src/tailwind.css -o ./assets/tailwind.css --minify",
+    "shopify:dev": "shopify theme dev",
+    "shopify:check": "shopify theme check",
+    "shopify:pull": "shopify theme pull",
+    "shopify:push": "shopify theme push"
+  },
+  "keywords": [
+    "shopify",
+    "theme",
+    "tailwindcss",
+    "starter",
+    "liquid"
+  ],
+  "author": "Asad",
+  "license": "MIT",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "concurrently": "^9.2.1",
+    "tailwindcss": "^4.3.3"
+  }
+}
