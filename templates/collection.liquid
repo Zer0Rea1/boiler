@@ -1,0 +1,26 @@
+<section class="page-width section-space">
+  <p class="eyebrow">Your daily ritual</p>
+  <h1>{{ collection.title | escape }}</h1>
+  {% if collection.description != blank %}<div class="prose">{{ collection.description }}</div>{% endif %}
+  <div class="listing-tools">
+    <p class="muted">{{ collection.products_count }} products</p>
+    <form action="{{ collection.url }}" method="get">
+      <label for="SortBy">Sort by</label>
+      {% assign current_sort = collection.sort_by | default: collection.default_sort_by %}
+      <select class="field" id="SortBy" name="sort_by">
+        {% for option in collection.sort_options %}<option value="{{ option.value | escape }}" {% if option.value == current_sort %}selected{% endif %}>{{ option.name | escape }}</option>{% endfor %}
+      </select>
+      <button class="button button--outline" type="submit">Apply</button>
+    </form>
+  </div>
+  {% paginate collection.products by 16 %}
+    <div class="product-grid" data-reveal>
+      {% for product in collection.products %}
+        {% render 'product-card', product: product %}
+      {% else %}
+        <p class="empty-state">There are no products in this collection yet.</p>
+      {% endfor %}
+    </div>
+    {% if paginate.pages > 1 %}<nav aria-label="Collection pages">{{ paginate | default_pagination }}</nav>{% endif %}
+  {% endpaginate %}
+</section>

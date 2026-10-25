@@ -1,0 +1,24 @@
+.product-gallery { min-width: 0; align-content: start; }
+.product-slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; border-radius: 3px; background: var(--surface-alt); scrollbar-width: thin; }
+.product-slide { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; aspect-ratio: 4/5; }
+.product-slide > img,.product-slide > svg { width: 100%; height: 100%; object-fit: contain; }
+.product-gallery-controls { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 12px; }
+.product-gallery-controls .button { padding: 10px 16px; min-height: 44px; }
+.product-thumbnails { display: flex; gap: 10px; overflow-x: auto; padding: 4px; }
+.product-thumbnail { flex: 0 0 64px; height: 80px; border: 1px solid var(--line); padding: 3px; border-radius: 3px; background: var(--surface); }
+.product-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+.product-thumbnail[aria-current=true] { border: 2px solid var(--ink); }
+.product-variants { border: 0; padding: 0; margin: 0; }
+.product-variants legend { font-size: 13px; margin-bottom: 10px; }
+.product-variant-options { display: flex; flex-wrap: wrap; gap: 10px; }
+.product-variant { position: relative; margin: 0; cursor: pointer; }
+.product-variant input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.product-variant span { display: block; padding: 11px 18px; min-height: 44px; border: 1px solid var(--line); border-radius: 3px; font-size: 13px; }
+.product-variant input:checked + span { border-color: var(--ink); background: var(--surface-alt); box-shadow: inset 0 0 0 1px var(--ink); }
+.product-variant input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 4px; }
+.product-variant small { display: block; font-size: 11px; color: var(--muted); }
+.product-option-status { font-size: 12px; color: var(--muted); }
+[data-product-root] [hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .product-slider { scroll-behavior: auto; }
+}

@@ -1,0 +1,86 @@
+<section class="page-width section-space">
+  <a class="text-link" href="{{ routes.account_url }}">Back to account</a>
+  <div class="section-heading"><h1>Your addresses.</h1><p>Keep your everyday care heading in the right direction.</p></div>
+  {% paginate customer.addresses by 10 %}
+    <div class="address-grid">
+      {% for address in customer.addresses %}
+        <article class="address-card">
+          {% if address == customer.default_address %}<h2>Default address</h2>{% else %}<h2>Address {{ forloop.index }}</h2>{% endif %}
+          {{ address | format_address }}
+          <details>
+            <summary>Edit address</summary>
+            {% assign address_form_id = 'AddressForm-' | append: address.id %}
+            {% form 'customer_address', address, id: address_form_id %}
+              <div role="alert">{{ form.errors | default_errors }}</div>
+      <label for="Address-first_name-{{ address.id }}">First name</label>
+      <input class="field" id="Address-first_name-{{ address.id }}" type="text" name="address[first_name]" value="{{ form.first_name | escape }}" autocomplete="given-name">
+      <label for="Address-last_name-{{ address.id }}">Last name</label>
+      <input class="field" id="Address-last_name-{{ address.id }}" type="text" name="address[last_name]" value="{{ form.last_name | escape }}" autocomplete="family-name">
+      <label for="Address-company-{{ address.id }}">Company</label>
+      <input class="field" id="Address-company-{{ address.id }}" type="text" name="address[company]" value="{{ form.company | escape }}" autocomplete="organization">
+      <label for="Address-address1-{{ address.id }}">Address</label>
+      <input class="field" id="Address-address1-{{ address.id }}" type="text" name="address[address1]" value="{{ form.address1 | escape }}" autocomplete="address-line1" required>
+      <label for="Address-address2-{{ address.id }}">Apartment, suite, etc.</label>
+      <input class="field" id="Address-address2-{{ address.id }}" type="text" name="address[address2]" value="{{ form.address2 | escape }}" autocomplete="address-line2">
+      <label for="Address-city-{{ address.id }}">City</label>
+      <input class="field" id="Address-city-{{ address.id }}" type="text" name="address[city]" value="{{ form.city | escape }}" autocomplete="address-level2" required>
+      <label for="Address-country-{{ address.id }}">Country / region</label>
+      <select class="field" id="Address-country-{{ address.id }}" name="address[country]" autocomplete="country-name" required>
+        {% if form.country != blank %}<option value="{{ form.country | escape }}" selected>{{ form.country | escape }}</option>{% else %}<option value="">Choose country / region</option>{% endif %}
+        {{ all_country_option_tags }}
+      </select>
+      <label for="Address-province-{{ address.id }}">State / province</label>
+      <input class="field" id="Address-province-{{ address.id }}" type="text" name="address[province]" value="{{ form.province | escape }}" autocomplete="address-level1">
+      <label for="Address-zip-{{ address.id }}">Postal code</label>
+      <input class="field" id="Address-zip-{{ address.id }}" type="text" name="address[zip]" value="{{ form.zip | escape }}" autocomplete="postal-code" autocapitalize="characters">
+      <label for="Address-phone-{{ address.id }}">Phone</label>
+      <input class="field" id="Address-phone-{{ address.id }}" type="tel" name="address[phone]" value="{{ form.phone | escape }}" autocomplete="tel">
+      <label class="checkbox-label" for="Address-default-{{ address.id }}"><input id="Address-default-{{ address.id }}" type="checkbox" name="address[default]" value="1" {% if form.default %}checked{% endif %}> Set as default address</label>
+              <button class="button" type="submit">Save address</button>
+            {% endform %}
+          </details>
+          <details>
+            <summary>Remove address</summary>
+            <p>Remove this saved address from your account?</p>
+            <form action="{{ routes.account_addresses_url }}/{{ address.id }}" method="post">
+              <input type="hidden" name="_method" value="delete">
+              <button class="button button--outline" type="submit">Confirm removal</button>
+            </form>
+          </details>
+        </article>
+      {% else %}<p class="muted">You haven't saved any addresses yet.</p>{% endfor %}
+    </div>
+    {% if paginate.pages > 1 %}<nav aria-label="Pagination">{{ paginate | default_pagination }}</nav>{% endif %}
+  {% endpaginate %}
+  <div class="account-panel section-space">
+    <h2>Add an address</h2>
+    {% form 'customer_address', customer.new_address, id: 'NewAddressForm' %}
+      <div role="alert">{{ form.errors | default_errors }}</div>
+      <label for="Address-first_name-new">First name</label>
+      <input class="field" id="Address-first_name-new" type="text" name="address[first_name]" value="{{ form.first_name | escape }}" autocomplete="given-name">
+      <label for="Address-last_name-new">Last name</label>
+      <input class="field" id="Address-last_name-new" type="text" name="address[last_name]" value="{{ form.last_name | escape }}" autocomplete="family-name">
+      <label for="Address-company-new">Company</label>
+      <input class="field" id="Address-company-new" type="text" name="address[company]" value="{{ form.company | escape }}" autocomplete="organization">
+      <label for="Address-address1-new">Address</label>
+      <input class="field" id="Address-address1-new" type="text" name="address[address1]" value="{{ form.address1 | escape }}" autocomplete="address-line1" required>
+      <label for="Address-address2-new">Apartment, suite, etc.</label>
+      <input class="field" id="Address-address2-new" type="text" name="address[address2]" value="{{ form.address2 | escape }}" autocomplete="address-line2">
+      <label for="Address-city-new">City</label>
+      <input class="field" id="Address-city-new" type="text" name="address[city]" value="{{ form.city | escape }}" autocomplete="address-level2" required>
+      <label for="Address-country-new">Country / region</label>
+      <select class="field" id="Address-country-new" name="address[country]" autocomplete="country-name" required>
+        {% if form.country != blank %}<option value="{{ form.country | escape }}" selected>{{ form.country | escape }}</option>{% else %}<option value="">Choose country / region</option>{% endif %}
+        {{ all_country_option_tags }}
+      </select>
+      <label for="Address-province-new">State / province</label>
+      <input class="field" id="Address-province-new" type="text" name="address[province]" value="{{ form.province | escape }}" autocomplete="address-level1">
+      <label for="Address-zip-new">Postal code</label>
+      <input class="field" id="Address-zip-new" type="text" name="address[zip]" value="{{ form.zip | escape }}" autocomplete="postal-code" autocapitalize="characters">
+      <label for="Address-phone-new">Phone</label>
+      <input class="field" id="Address-phone-new" type="tel" name="address[phone]" value="{{ form.phone | escape }}" autocomplete="tel">
+      <label class="checkbox-label" for="Address-default-new"><input id="Address-default-new" type="checkbox" name="address[default]" value="1" {% if form.default %}checked{% endif %}> Set as default address</label>
+      <button class="button" type="submit">Add address</button>
+    {% endform %}
+  </div>
+</section>

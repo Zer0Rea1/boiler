@@ -1,0 +1,17 @@
+<section class="page-width section-space account-panel">
+  <h1>Make yourself at home.</h1>
+  <p class="muted">Keep your orders and everyday essentials in one place.</p>
+  {% form 'create_customer' %}
+    <div role="alert">{{ form.errors | default_errors }}</div>
+    <label for="FirstName">First name</label>
+    <input class="field" id="FirstName" type="text" name="customer[first_name]" value="{{ form.first_name | escape }}" autocomplete="given-name">
+    <label for="LastName">Last name</label>
+    <input class="field" id="LastName" type="text" name="customer[last_name]" value="{{ form.last_name | escape }}" autocomplete="family-name">
+    <label for="RegisterEmail">Email address</label>
+    <input class="field" id="RegisterEmail" type="email" name="customer[email]" value="{{ form.email | escape }}" autocomplete="email" required>
+    <label for="RegisterPassword">Password</label>
+    <input class="field" id="RegisterPassword" type="password" name="customer[password]" autocomplete="new-password" required>
+    <button class="button" type="submit">Create account</button>
+  {% endform %}
+  <p><a class="text-link" href="{{ routes.account_login_url }}">Already a member? Sign in</a></p>
+</section>

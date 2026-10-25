@@ -1,0 +1,13 @@
+<section class="page-width section-space account-panel">
+  <h1>Your care starts here.</h1>
+  <p class="muted">Choose a password to activate your account.</p>
+  {% form 'activate_customer_password' %}
+    <div role="alert">{{ form.errors | default_errors }}</div>
+    <label for="ActivatePassword">Password</label>
+    <input class="field" id="ActivatePassword" type="password" name="customer[password]" autocomplete="new-password" required>
+    <label for="ActivatePasswordConfirmation">Confirm password</label>
+    <input class="field" id="ActivatePasswordConfirmation" type="password" name="customer[password_confirmation]" autocomplete="new-password" required>
+    <button class="button" type="submit">Activate account</button>
+    <button class="button button--outline" type="submit" name="decline" value="true" formnovalidate>Decline invitation</button>
+  {% endform %}
+</section>

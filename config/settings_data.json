@@ -1,3 +1,12 @@
 {
-  "current": {}
+  "current": {
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "account_url": "https://shopify.com/83610501346/account"
+        }
+      }
+    }
+  }
 }

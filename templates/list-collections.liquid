@@ -1,0 +1,28 @@
+<section class="page-width section-space">
+  <div class="section-heading">
+    <p class="eyebrow">Find your ritual</p>
+    <h1>Shop collections</h1>
+  </div>
+  {% paginate collections by 12 %}
+    <div class="product-grid" data-reveal>
+      {% for collection in collections %}
+        <article class="product-card">
+          <a class="product-card__image" href="{{ collection.url }}" aria-label="{{ collection.title | escape }}">
+            {% if collection.featured_image %}
+              {{ collection.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360,600,900', sizes: '(min-width: 1024px) 25vw, 50vw', alt: collection.featured_image.alt }}
+            {% else %}
+              {{ 'collection-1' | placeholder_svg_tag: 'placeholder-image' }}
+            {% endif %}
+          </a>
+          <div class="product-card__info">
+            <h2 class="collection-card__title"><a href="{{ collection.url }}">{{ collection.title | escape }}</a></h2>
+            <p>{{ collection.products_count }} products</p>
+          </div>
+        </article>
+      {% else %}
+        <p class="empty-state">Collections will appear here when they are available.</p>
+      {% endfor %}
+    </div>
+    {% if paginate.pages > 1 %}<nav aria-label="Pagination">{{ paginate | default_pagination }}</nav>{% endif %}
+  {% endpaginate %}
+</section>

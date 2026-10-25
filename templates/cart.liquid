@@ -1,0 +1,48 @@
+<section class="page-width section-space">
+  <h1>Your bag</h1>
+  {% if cart.empty? %}
+    <div class="empty-state">
+      <p>Your next everyday essential is waiting.</p>
+      <a class="button" href="{{ routes.all_products_collection_url }}">Explore skincare</a>
+    </div>
+  {% else %}
+    <form action="{{ routes.cart_url }}" method="post">
+      {% for item in cart.items %}
+        <article class="cart-item">
+          <a href="{{ item.url }}" aria-label="{{ item.product.title | escape }}">
+            {% if item.image %}
+              {{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: item.image.alt }}
+            {% else %}
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-image' }}
+            {% endif %}
+          </a>
+          <div>
+            <h2><a href="{{ item.url }}">{{ item.product.title | escape }}</a></h2>
+            {% unless item.product.has_only_default_variant %}<p class="muted">{{ item.variant.title | escape }}</p>{% endunless %}
+            {% if item.selling_plan_allocation %}<p>{{ item.selling_plan_allocation.selling_plan.name | escape }}</p>{% endif %}
+            {% for property in item.properties %}
+              {% assign first_character = property.first | slice: 0 %}
+              {% if property.last != blank and first_character != '_' %}
+                <p>{{ property.first | escape }}: {{ property.last | escape }}</p>
+              {% endif %}
+            {% endfor %}
+            {% for discount in item.line_level_discount_allocations %}<p>{{ discount.discount_application.title | escape }} (-{{ discount.amount | money }})</p>{% endfor %}
+            <a class="text-link" href="{{ item.url_to_remove }}">Remove</a>
+          </div>
+          <div>
+            <label for="Quantity-{{ item.index | plus: 1 }}">Quantity</label>
+            <input class="field" type="number" id="Quantity-{{ item.index | plus: 1 }}" name="updates[]" value="{{ item.quantity }}" min="{{ item.variant.quantity_rule.min }}" step="{{ item.variant.quantity_rule.increment }}" {% if item.variant.quantity_rule.max != null %}max="{{ item.variant.quantity_rule.max }}"{% endif %} required>
+          </div>
+          <p>{{ item.final_line_price | money }}</p>
+        </article>
+      {% endfor %}
+      <div class="cart-summary">
+        {% for discount in cart.cart_level_discount_applications %}<p>{{ discount.title | escape }} (-{{ discount.total_allocated_amount | money }})</p>{% endfor %}
+        <h2>Subtotal {{ cart.total_price | money_with_currency }}</h2>
+        <p class="muted">Taxes and shipping calculated at checkout.</p>
+        <button class="button button--outline" type="submit" name="update">Update bag</button>
+        <button class="button" type="submit" name="checkout">Checkout</button>
+      </div>
+    </form>
+  {% endif %}
+</section>

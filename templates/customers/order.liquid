@@ -1,0 +1,35 @@
+<section class="page-width section-space">
+  <a class="text-link" href="{{ routes.account_url }}">Back to account</a>
+  <div class="section-heading"><h1>Order {{ order.name | escape }}</h1><p>Placed {{ order.created_at | date: '%B %d, %Y' }}</p></div>
+  {% if order.cancelled %}<p role="status">Cancelled {{ order.cancelled_at | date: '%B %d, %Y' }}. {{ order.cancel_reason_label | escape }}</p>{% endif %}
+  <div class="account-layout">
+    <div>
+      {% for item in order.line_items %}
+        <article class="account-order">
+          <h3>{% if item.url %}<a href="{{ item.url }}">{{ item.title | escape }}</a>{% else %}{{ item.title | escape }}{% endif %}</h3>
+          <p>Quantity {{ item.quantity }} / {{ item.final_line_price | money_with_currency }}</p>
+          {% if item.original_line_price != item.final_line_price %}<p class="muted">Original price <s>{{ item.original_line_price | money }}</s></p>{% endif %}
+          {% for allocation in item.line_level_discount_allocations %}<p>{{ allocation.discount_application.title | escape }} (-{{ allocation.amount | money }})</p>{% endfor %}
+          {% if item.fulfillment %}
+            <p>Fulfilled {{ item.fulfillment.created_at | date: '%B %d, %Y' }}</p>
+            {% if item.fulfillment.tracking_url %}<a class="text-link" href="{{ item.fulfillment.tracking_url }}">Track shipment{% if item.fulfillment.tracking_number %} {{ item.fulfillment.tracking_number | escape }}{% endif %}</a>{% endif %}
+          {% endif %}
+        </article>
+      {% endfor %}
+      <div class="order-totals">
+        <p>Subtotal {{ order.line_items_subtotal_price | money_with_currency }}</p>
+        {% for discount in order.cart_level_discount_applications %}<p>{{ discount.title | escape }} (-{{ discount.total_allocated_amount | money }})</p>{% endfor %}
+        {% for shipping_method in order.shipping_methods %}<p>{{ shipping_method.title | escape }} {{ shipping_method.price | money }}</p>{% endfor %}
+        {% for tax in order.tax_lines %}<p>{{ tax.title | escape }} {{ tax.price | money }}</p>{% endfor %}
+        {% if order.total_duties > 0 %}<p>Duties {{ order.total_duties | money }}</p>{% endif %}
+        <h2>Total {{ order.total_price | money_with_currency }}</h2>
+      </div>
+    </div>
+    <aside>
+      <h2>Billing details</h2><p>{{ order.financial_status_label | escape }}</p>
+      {{ order.billing_address | format_address }}
+      <h2>Shipping details</h2><p>{{ order.fulfillment_status_label | escape }}</p>
+      {{ order.shipping_address | format_address }}
+    </aside>
+  </div>
+</section>

@@ -1,0 +1,20 @@
+<section class="page-width section-space contact-page">
+  <div class="section-heading">
+    <p class="eyebrow">We're here to help</p>
+    <h1>{{ page.title | escape }}</h1>
+    {% if page.content != blank %}<div class="prose">{{ page.content }}</div>{% endif %}
+  </div>
+  {% form 'contact', class: 'content-form' %}
+    {% if form.posted_successfully? %}<p role="status">Thanks for getting in touch. Your message has been sent.</p>{% endif %}
+    {% if form.errors %}<div role="alert">{{ form.errors | default_errors }}</div>{% endif %}
+    <label for="ContactName">Name</label>
+    <input class="field" id="ContactName" type="text" name="contact[name]" value="{{ form.name | default: customer.name | escape }}" autocomplete="name" required>
+    <label for="ContactEmail">Email</label>
+    <input class="field" id="ContactEmail" type="email" name="contact[email]" value="{{ form.email | default: customer.email | escape }}" autocomplete="email" required>
+    <label for="ContactOrder">Order number (optional)</label>
+    <input class="field" id="ContactOrder" type="text" name="contact[order_number]" value="{{ form.order_number | escape }}">
+    <label for="ContactMessage">Message</label>
+    <textarea class="field" id="ContactMessage" name="contact[body]" rows="7" required>{{ form.body | escape }}</textarea>
+    <button class="button" type="submit">Send message</button>
+  {% endform %}
+</section>

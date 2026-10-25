@@ -1,0 +1,64 @@
+<footer class="site-footer">
+  <div class="footer-top page-width">
+    <div class="newsletter">
+      <h2>{{ section.settings.heading | escape }}</h2>
+      <p>{{ section.settings.description | escape }}</p>
+      {% assign newsletter_id = 'Newsletter-' | append: section.id %}
+      {% form 'customer', id: newsletter_id, class: 'newsletter-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <label for="NewsletterEmail-{{ section.id }}">Email address</label>
+        <div class="newsletter-input-row">
+          <input
+            id="NewsletterEmail-{{ section.id }}"
+            class="field"
+            type="email"
+            name="contact[email]"
+            value="{{ form.email | escape }}"
+            placeholder="Your email address"
+            autocomplete="email"
+            autocorrect="off"
+            autocapitalize="off"
+            required
+            {% if form.errors %}aria-invalid="true" aria-describedby="NewsletterMessage-{{ section.id }}"{% endif %}
+          >
+          <button class="button" type="submit">Count me in {% render 'icon', name: 'arrow-right' %}</button>
+        </div>
+        {% if form.errors %}
+          <div id="NewsletterMessage-{{ section.id }}" role="alert">{{ form.errors | default_errors }}</div>
+        {% endif %}
+        {% if form.posted_successfully? %}
+          <p role="status">You're on the list. Thanks for joining us.</p>
+        {% endif %}
+      {% endform %}
+    </div>
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="{{ routes.all_products_collection_url }}">Shop all</a>
+      <a href="{{ routes.root_url }}#approach">Our approach</a>
+      <a href="{{ routes.root_url }}#questions">Questions</a>
+      {% for link in section.settings.menu.links %}
+        <a href="{{ link.url }}">{{ link.title | escape }}</a>
+      {% endfor %}
+      {% for policy in shop.policies %}
+        {% if policy.body != blank %}
+          <a href="{{ policy.url }}">{{ policy.title | escape }}</a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+  </div>
+  <div class="footer-bottom page-width">
+    <a class="footer-wordmark" href="{{ routes.root_url }}">{{ section.settings.brand_name | escape }}</a>
+    <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | escape }}</p>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "text", "id": "brand_name", "label": "Brand name", "default": "morrow" },
+    { "type": "text", "id": "heading", "label": "Newsletter heading", "default": "Good things, in your inbox." },
+    { "type": "text", "id": "description", "label": "Newsletter description", "default": "New arrivals, everyday rituals, and a little more morrow." },
+    { "type": "link_list", "id": "menu", "label": "Additional footer links" }
+  ]
+}
+{% endschema %}

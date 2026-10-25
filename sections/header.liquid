@@ -1,0 +1,52 @@
+{% liquid
+  assign account_link = section.settings.account_url
+  if account_link == blank
+    assign account_link = routes.account_login_url
+    if customer
+      assign account_link = routes.account_url
+    endif
+  endif
+%}
+{% if section.settings.announcement != blank %}
+  <div class="announcement">{{ section.settings.announcement | escape }}</div>
+{% endif %}
+<header class="site-header">
+  <div class="header-inner page-width">
+    <details class="mobile-menu">
+      <summary aria-label="Toggle navigation">
+        <span class="menu-icon">{% render 'icon', name: 'menu' %}</span>
+        <span class="close-icon">{% render 'icon', name: 'close' %}</span>
+        <span class="visually-hidden">Menu</span>
+      </summary>
+      <nav class="mobile-nav" aria-label="Mobile navigation">
+        <a href="{{ routes.all_products_collection_url }}">Shop all</a>
+        <a href="{{ routes.root_url }}#approach">Our approach</a>
+        <a href="{{ routes.root_url }}#questions">Questions</a>
+        <a href="{{ routes.search_url }}">Search</a>
+        {% if shop.customer_accounts_enabled or section.settings.account_url != blank %}<a href="{{ account_link }}">Account</a>{% endif %}
+      </nav>
+    </details>
+    <a class="wordmark" href="{{ routes.root_url }}" aria-label="{{ section.settings.brand_name | escape }} home">{{ section.settings.brand_name | escape }}</a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a href="{{ routes.all_products_collection_url }}">Shop all</a>
+      <a href="{{ routes.root_url }}#approach">Our approach</a>
+      <a href="{{ routes.root_url }}#questions">Questions</a>
+    </nav>
+    <div class="header-actions">
+      {% if shop.customer_accounts_enabled or section.settings.account_url != blank %}<a class="header-account icon-button" href="{{ account_link }}" aria-label="Your account">{% render 'icon', name: 'account' %}</a>{% endif %}
+      <a class="header-search icon-button" href="{{ routes.search_url }}" aria-label="Search store">{% render 'icon', name: 'search' %}</a>
+      <a class="header-bag icon-button" href="{{ routes.cart_url }}" aria-label="Shopping bag with {{ cart.item_count }} items">{% render 'icon', name: 'bag' %}<span class="bag-count" aria-hidden="true">{{ cart.item_count }}</span></a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "url", "id": "account_url", "label": "Customer account URL", "info": "Use your Shopify-hosted account URL. Leave blank to use the default Shopify account routes." },
+    { "type": "text", "id": "brand_name", "label": "Brand name", "default": "morrow" },
+    { "type": "text", "id": "announcement", "label": "Announcement", "default": "A little care, every day." }
+  ]
+}
+{% endschema %}

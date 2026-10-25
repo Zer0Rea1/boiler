@@ -1,0 +1,43 @@
+<article class="page-width section-space article-page">
+  <a class="text-link" href="{{ blog.url }}">Back to {{ blog.title | escape }}</a>
+  <header class="section-heading">
+    <h1>{{ article.title | escape }}</h1>
+    <p class="muted">{{ article.author | escape }}<br><time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%B %d, %Y' }}</time></p>
+  </header>
+  {% if article.image %}
+    {{ article.image | image_url: width: 1600 | image_tag: loading: 'eager', widths: '480,800,1200,1600', sizes: '(min-width: 1024px) 900px, 100vw', alt: article.image.alt }}
+  {% endif %}
+  <div class="prose article-body">{{ article.content }}</div>
+  {% if blog.comments_enabled? %}
+    <section class="article-comments" aria-labelledby="CommentsHeading">
+      <h2 id="CommentsHeading">Comments</h2>
+      {% paginate article.comments by 10 %}
+        {% for comment in article.comments %}
+          <article class="comment">
+            <h3>{{ comment.author | escape }}</h3>
+            <p class="muted"><time datetime="{{ comment.created_at | date: '%Y-%m-%d' }}">{{ comment.created_at | date: '%B %d, %Y' }}</time></p>
+            <div class="prose">{{ comment.content }}</div>
+          </article>
+        {% else %}
+          <p class="muted">Be the first to join the conversation.</p>
+        {% endfor %}
+        {% if paginate.pages > 1 %}<nav aria-label="Pagination">{{ paginate | default_pagination }}</nav>{% endif %}
+      {% endpaginate %}
+      <h2>Leave a comment</h2>
+      {% form 'new_comment', article, class: 'content-form' %}
+        {% if form.posted_successfully? %}
+          <p role="status">Thank you for your comment.{% if blog.moderated? %} It will appear after approval.{% endif %}</p>
+        {% endif %}
+        {% if form.errors %}<div role="alert">{{ form.errors | default_errors }}</div>{% endif %}
+        <label for="CommentAuthor">Name</label>
+        <input class="field" id="CommentAuthor" type="text" name="comment[author]" value="{{ form.author | escape }}" autocomplete="name" required>
+        <label for="CommentEmail">Email</label>
+        <input class="field" id="CommentEmail" type="email" name="comment[email]" value="{{ form.email | escape }}" autocomplete="email" required>
+        <p class="muted">Your email address will not be published.</p>
+        <label for="CommentBody">Comment</label>
+        <textarea class="field" id="CommentBody" name="comment[body]" rows="6" required>{{ form.body | escape }}</textarea>
+        <button class="button" type="submit">Post comment</button>
+      {% endform %}
+    </section>
+  {% endif %}
+</article>
